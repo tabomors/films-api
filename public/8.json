@@ -1,6 +1,7 @@
 {
   "name": "Star wars 8",
-  "category": "default",
+  "category": "sci-fi",
   "rating": 10,
-  "id": 8
+  "id": 8,
+  "released": 2005
 }

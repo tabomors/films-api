@@ -1,25 +1,45 @@
 const path = require("path");
 const fs = require("fs");
 const express = require("express");
-// const bodyParser = require("body-parser");
+
+const categories = JSON.parse(fs.readFileSync(path.join("public", "categories.json"), "utf-8"))
+const releasedYears = JSON.parse(fs.readFileSync(
+  path.join("public", "releasedYears.json"),
+  "utf-8"
+));
 
 const app = express();
 
 // TODO: Remove it in prod
 app.use(express.static(path.join(__dirname, "public")));
 
-// NOTE: don't need it for now
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
+app.get("/films", (req, res) => {
+  const { query: { category: filmCategory, released: fileReleaseYear } } = req; 
 
-app.get("/films", (_, res) => {
   fs.readFile(path.join("public", "films.json"), "utf8", (err, data) => {
     if (err) {
       res.sendStatus(500, { message: "Internal server error" });
       return;
     }
     const films = JSON.parse(data);
-    res.send({ message: films });
+    const filmsByCategory = filmCategory
+      ? films
+          .map(film => Object.assign(film, { category: findParamByFilmId(categories, film.id) }))
+          .filter(({ category }) => category === filmCategory)
+          .map(film => Object.assign(film, { category: filmCategory }))
+      : films;
+
+    const filmsByReleaseYear = fileReleaseYear
+      ? filmsByCategory
+          .map(film =>
+            Object.assign(film, {
+              released: findParamByFilmId(releasedYears, film.id)
+            })
+          )
+          .filter(({ released }) => released === fileReleaseYear)
+          .map(film => Object.assign(film, { released: fileReleaseYear }))
+      : filmsByCategory;
+    res.send({ message: filmsByReleaseYear });
   });
 });
 
@@ -56,3 +76,10 @@ const PORT = 8000;
 app.listen(PORT, () => {
   console.log(`App is listening on the port ${PORT}`);
 });
+
+function findParamByFilmId(lookupTable, filmId) {
+  return Object.keys(lookupTable).find(param => {
+    const raw = lookupTable[param];
+    return raw.includes(filmId);
+  })
+}

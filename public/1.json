@@ -1,6 +1,7 @@
 {
   "name": "Star wars 1",
-  "category": "default",
+  "category": "sci-fi",
   "rating": 10,
-  "id": 1
+  "id": 1,
+  "released": 2001
 }

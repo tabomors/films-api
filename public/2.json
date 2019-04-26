@@ -1,6 +1,7 @@
 {
   "name": "Star wars 2",
-  "category": "default",
+  "category": "sci-fi",
   "rating": 10,
-  "id": 2
+  "id": 2,
+  "released": 2002
 }

@@ -1,6 +1,7 @@
 {
   "name": "Star wars 6",
-  "category": "default",
+  "category": "sci-fi",
   "rating": 10,
-  "id": 6
+  "id": 6,
+  "released": 2005
 }
