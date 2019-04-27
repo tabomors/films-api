@@ -1,6 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const express = require("express");
+const cors = require("cors");
 
 const categories = JSON.parse(fs.readFileSync(path.join("public", "categories.json"), "utf-8"))
 const releasedYears = JSON.parse(fs.readFileSync(
@@ -12,6 +13,9 @@ const app = express();
 
 // TODO: Remove it in prod
 app.use(express.static(path.join(__dirname, "public")));
+
+// TODO: configure cors
+app.use(cors());
 
 app.get("/films", (req, res) => {
   const { query: { category: filmCategory, released: fileReleaseYear } } = req; 
