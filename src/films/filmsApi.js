@@ -21,7 +21,7 @@ const multipleFilmsApiHandler = (req, res) => {
   // TODO: move it from API handler
   fs.readFile(path.join("public", "films.json"), "utf8", (err, data) => {
     if (err) {
-      res.sendStatus(500, { message: "Internal server error" });
+      res.status(500).send({ error: "Internal server error" });
       return;
     }
     const films = JSON.parse(data);
@@ -61,7 +61,7 @@ const filmApiHandler = (req, res) => {
 
   fs.readFile(path.join("public", `${filmId}.json`), "utf8", (err, data) => {
     if (err) {
-      res.sendStatus(500, { message: "Internal server error" });
+      res.status(500).send({ error: `There is no films with id ${filmId}` });
       return;
     }
     const film = JSON.parse(data);
