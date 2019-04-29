@@ -16,6 +16,9 @@
   },
   "dependencies": {
     "body-parser": "^1.18.3",
-    "cors": "^2.8.5"
+    "cheerio": "^1.0.0-rc.3",
+    "cors": "^2.8.5",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
   }
 }
