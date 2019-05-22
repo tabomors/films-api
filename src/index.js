@@ -4,6 +4,9 @@ const cors = require("cors");
 const filmsApi = require("./films");
 const { logger } = require("./common/middlewares");
 
+require("dotenv").config();
+require('./db');
+
 const app = express();
 const router = express.Router();
 
