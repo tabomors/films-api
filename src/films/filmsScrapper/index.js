@@ -1,8 +1,10 @@
 const rp = require("request-promise");
 const $ = require("cheerio");
 const { smallImgToBigImg } = require("./filmsScrapperUtils");
-const IMDB_ROOT = "https://www.imdb.com";
+const db = require("../../db");
+const Film = require("../models/Film");
 
+const IMDB_ROOT = "https://www.imdb.com";
 const firstPageUrl = `${IMDB_ROOT}/search/title?groups=top_250&sort=user_rating,desc`;
 
 async function grabFilmsPage(pageUrl, acc = []) {
@@ -25,13 +27,14 @@ async function grabFilmsPage(pageUrl, acc = []) {
         const filmTitle = $(".lister-item-header a", $el)
           .first()
           .text();
-        const filmReleaseYear = parseInt(
-          $(".lister-item-header span", $el)
-            .last()
-            .text()
-            .slice(1, -1),
-          10
-        );
+        const filmReleaseYear =
+          parseInt(
+            $(".lister-item-header span", $el)
+              .last()
+              .text()
+              .slice(1, -1),
+            10
+          ) || null;
         const filmCertificate = $(".certificate", $el).text();
         const filmDuration = parseInt(
           $(".runtime", $el)
@@ -86,10 +89,6 @@ async function grabFilmsPage(pageUrl, acc = []) {
           votes: filmVotes,
           gross: filmGross
         };
-
-        console.log("Fetched new film:");
-        console.log(filmItem);
-
         const filmDetailsLink = $(".lister-item-header a", $el).attr("href");
         const filmDetailsFullLink = `${IMDB_ROOT}${filmDetailsLink}`;
         const filmDetailsHtml = await rp(filmDetailsFullLink);
@@ -105,17 +104,22 @@ async function grabFilmsPage(pageUrl, acc = []) {
 
   const nextPageHref = $(".lister-page-next.next-page", html).attr("href");
   const nextPageFullHref = IMDB_ROOT + nextPageHref;
-  console.log("nextPageHref", nextPageHref);
   return nextPageHref
     ? grabFilmsPage(nextPageFullHref, updatedAcc)
     : updatedAcc;
 }
 
-(async () => {
+async function run() {
   try {
-    const res = await grabFilmsPage(firstPageUrl, []);
-    console.log(res);
+    // TODO: profile it when you have time
+    const films = await grabFilmsPage(firstPageUrl, []);
+    console.log("Films were grabbed", films);
+    const res = await Film.insertMany(films);
+    console.log("Films were added to the database");
+    db.connection.close();
   } catch (e) {
     console.error(e);
   }
-})();
+}
+
+run();
