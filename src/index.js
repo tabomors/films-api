@@ -2,7 +2,10 @@ const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const filmsApi = require("./films");
-const { logger } = require("./common/middlewares");
+const { logger, error } = require("./common/middlewares");
+
+require("dotenv").config();
+require("./db");
 
 const app = express();
 const router = express.Router();
@@ -13,11 +16,12 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 
 // Why i can't see req params in logger?
-app.use(logger)
+app.use(logger);
 
 router.use("/films", filmsApi);
 
 app.use("/", router);
+app.use(error);
 
 const PORT = 8000;
 app.listen(PORT, () => {
