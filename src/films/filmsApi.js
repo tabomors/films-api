@@ -36,12 +36,12 @@ const filmApiHandler = async (req, res, next) => {
 
 router.get("/", multipleFilmsApiHandler);
 router.get("/:topRating", filmApiHandler);
-router.use((err, req, res) => {
-  // TODO: finish it
+router.use((err, req, res, next) => {
+  // TODO: handle it here if it is operational
   // https://github.com/i0natan/nodebestpractices/blob/master/sections/errorhandling/useonlythebuiltinerror.md
   console.log('Films error:')
-  console.error(err);
-  res.sendStatus(500)
+  // or pass error to the next middleware
+  next(err);
 });
 
 module.exports = router;

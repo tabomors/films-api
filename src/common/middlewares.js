@@ -9,13 +9,9 @@ const logger = (req, res, next) => {
 };
 
 // TODO: dig into error handling
-const error = (err, req, res) => {
-  console.log('here')
-  if (err) {
-    console.log('common error')
-    console.error(err);
-    res.sendStatus(500);
-  }
+const error = (err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send({ message: "Server is down" });
 };
 
 module.exports = { logger, error };

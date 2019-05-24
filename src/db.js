@@ -8,7 +8,7 @@ mongoose.connect(
   { useNewUrlParser: true, dbName: "filmsDb", useCreateIndex: true },
   err => {
     if (err) {
-      console.error("Can't connect to database!", connectionStr);
+      console.error("Can't connect to database!");
       console.error(err);
       return;
     }
