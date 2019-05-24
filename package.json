@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon src/index.js",
+    "grab": "node src/films/filmsScrapper/index.js",
     "test": "jest"
   },
   "keywords": [],
