@@ -19,7 +19,9 @@ async function multipleFilmsController(categories, releaseYear) {
 async function oneFilmController(tr) {
   const topRating = parseInt(tr, 10);
   if (!topRating) {
-    throw new Error("Given topRating is invalid!");
+    const filmsError = new Error("Given topRating is invalid!")
+    filmsError.isOperational = true;
+    throw filmsError;
   }
   const film = await findOneFilm(topRating);
   return film;

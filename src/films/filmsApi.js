@@ -1,4 +1,6 @@
 const express = require("express");
+const { error } = require('./filmsMiddlewares')
+
 const {
   multipleFilmsController,
   oneFilmController
@@ -36,12 +38,6 @@ const filmApiHandler = async (req, res, next) => {
 
 router.get("/", multipleFilmsApiHandler);
 router.get("/:topRating", filmApiHandler);
-router.use((err, req, res, next) => {
-  // TODO: handle it here if it is operational
-  // https://github.com/i0natan/nodebestpractices/blob/master/sections/errorhandling/useonlythebuiltinerror.md
-  console.log('Films error:')
-  // or pass error to the next middleware
-  next(err);
-});
+router.use(error);
 
 module.exports = router;
