@@ -8,7 +8,6 @@ require("dotenv").config();
 require("./db");
 
 const app = express();
-const router = express.Router();
 
 // TODO: Remove it in prod
 app.use(express.static(path.join(__dirname, "public")));
@@ -17,10 +16,10 @@ app.use(cors());
 
 // Why i can't see req params in logger?
 app.use(logger);
-
-router.use("/films", filmsApi);
-
-app.use("/", router);
+app.get("/", (req, res) => {
+  res.send({ message: "OK" });
+});
+app.use("/films", filmsApi);
 app.use(error);
 
 const PORT = 8000;
